@@ -17,6 +17,23 @@ esp_err_t BusControllerInit(struct BusController *bus_controller) {
     return ret;
 }
 
+esp_err_t BusControllerDeinit(struct BusController *bus_controller) {
+    esp_err_t ret;
+    switch (bus_controller->bus_type) {
+        case I2C:
+            ret = I2CControllerDeinit();
+            break;
+        case SPI:
+            ret = SPIControllerDeinit(&bus_controller->spi_controller);
+            break;
+        default:
+            ESP_LOGE("BusController", "Invalid bus type");
+            ret = ESP_FAIL;
+            break;
+    }
+    return ret;
+}
+
 esp_err_t BusControllerWrite(struct BusController *bus_controller, uint8_t cmd, uint8_t *data, size_t data_size) {
     esp_err_t ret;
     switch (bus_controller->bus_type) {

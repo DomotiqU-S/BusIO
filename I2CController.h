@@ -72,7 +72,7 @@ esp_err_t I2CControllerRead(i2c_data_t *this, uint8_t *rx_buffer, uint8_t reg, u
 esp_err_t I2CControllerWriteByte(i2c_data_t *this, uint8_t *tx_buffer, uint8_t reg);
 
 /**
- * @brief 
+ * @brief Write a word (4 bytes) to a register
  * 
  * @param data write a word to a register
  * @param tx_buffer data buffer to write
@@ -82,7 +82,7 @@ esp_err_t I2CControllerWriteByte(i2c_data_t *this, uint8_t *tx_buffer, uint8_t r
 esp_err_t I2CControllerWriteWord(i2c_data_t *this, uint8_t *tx_buffer, uint8_t reg);
 
 /**
- * @brief 
+ * @brief Write to a register with a given length
  * 
  * @param data the i2c_data_t object
  * @param tx_buffer data buffer to write
