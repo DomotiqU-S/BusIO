@@ -1,2 +1,2 @@
-idf_component_register(SRCS "BusController.c" "SPIController.c" "I2CController.c" 
+idf_component_register(SRCS "I2CController.cpp" "SPIController.cpp"
                     INCLUDE_DIRS ".")
