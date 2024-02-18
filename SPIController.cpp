@@ -15,15 +15,14 @@ SPIController::~SPIController()
 }
 
 esp_err_t SPIController::begin() {
-    spi_bus_config_t devbus;
-    devbus.mosi_io_num = this->mosi_pin;
-    devbus.miso_io_num = this->miso_pin;
-    devbus.sclk_io_num = this->sclk_pin;
-    devbus.quadwp_io_num = -1;
-    devbus.quadhd_io_num = -1;
-    devbus.max_transfer_sz = 32;
+    buscfg.mosi_io_num = this->mosi_pin;
+    buscfg.miso_io_num = this->miso_pin;
+    buscfg.sclk_io_num = this->sclk_pin;
+    buscfg.quadwp_io_num = -1;
+    buscfg.quadhd_io_num = -1;
+    buscfg.max_transfer_sz = 32;
 
-    esp_err_t ret = spi_bus_initialize((spi_host_device_t)HOST, &devbus, SPI_DMA_CH_AUTO);
+    esp_err_t ret = spi_bus_initialize(HOST, &buscfg, SPI_DMA_CH_AUTO);
 
     return ret;
 }
@@ -41,12 +40,11 @@ esp_err_t SPIController::readWord(uint8_t *rx_buffer, uint8_t reg, bool restart)
 esp_err_t SPIController::read(uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool restart)
 {
     esp_err_t ret;
-    spi_transaction_t t;
-    memset(&t, 0, sizeof(t));       //Zero out the transaction
-    t.length = (len + 1) * 8;                 //Len is in bytes, transaction length is in bits.
-    t.flags = SPI_TRANS_USE_RXDATA;
-    t.tx_buffer = &reg;               //Data
-    t.rx_buffer = rx_buffer;               //Data
+    memset(&transaction, 0, sizeof(transaction));       //Zero out the transaction
+    transaction.length = (len + 1) * 8;                 //Len is in bytes, transaction length is in bits.
+    transaction.flags = SPI_TRANS_USE_RXDATA;
+    transaction.tx_buffer = &reg;               //Data
+    transaction.rx_buffer = rx_buffer;               //Data
     //ret = spi_device_transmit(HOST, &t);  //Transmit!
     return ESP_OK;
 }
@@ -64,11 +62,10 @@ esp_err_t SPIController::writeWord(uint8_t *tx_buffer, uint8_t reg)
 esp_err_t SPIController::write(uint8_t *tx_buffer, uint8_t reg, uint8_t len)
 {
     esp_err_t ret;
-    spi_transaction_t t;
-    memset(&t, 0, sizeof(t));       //Zero out the transaction
-    t.length = (len + 1) * 8;                 //Len is in bytes, transaction length is in bits.
-    t.flags = 0;
-    t.tx_buffer = tx_buffer;               //Data
+    memset(&transaction, 0, sizeof(transaction));       //Zero out the transaction
+    transaction.length = (len + 1) * 8;                 //Len is in bytes, transaction length is in bits.
+    transaction.flags = 0;
+    transaction.tx_buffer = tx_buffer;               //Data
     //ret = spi_device_transmit(HOST, &t);  //Transmit!
     return ESP_OK;
 }

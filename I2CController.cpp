@@ -57,6 +57,7 @@ esp_err_t I2CController::begin() {
 */
 I2CController::~I2CController()
 {
+    i2c_driver_delete(I2C_MASTER_NUM);
 }
 /**
  * @brief Reads a byte from the slave device.
@@ -104,13 +105,13 @@ esp_err_t I2CController::readWord(uint8_t *rx_buffer, uint8_t reg, bool restart)
 */
 esp_err_t I2CController::read(uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool restart)
 {
-    int ret;
-
-    uint8_t write_buffer[1] = {reg};
+    uint8_t ret;
+    write_buffer[0] = reg;
 
     #if DEBUG_I2C_CONTROLLER
         ESP_LOGI(TAG, "Reading %d bytes from register 0x%02x in address 0x%02x", len, reg, this->address);
     #endif
+
     if(!restart)
     {
         ret = i2c_master_write_to_device(I2C_MASTER_NUM, this->address, write_buffer, 1, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
@@ -168,7 +169,6 @@ esp_err_t I2CController::writeWord(uint8_t *tx_buffer, uint8_t reg)
 esp_err_t I2CController::write(uint8_t *tx_buffer, uint8_t reg, uint8_t len)
 {
     int ret;
-    uint8_t write_buffer[len + 1];
     
     // Fill the write buffer with the register address and data
     write_buffer[0] = reg;
