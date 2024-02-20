@@ -133,6 +133,17 @@ public:
      * @return ESP_OK if the data is written successfully, ESP_FAIL otherwise.
     */
     esp_err_t write(uint8_t *tx_buffer, uint8_t reg, uint8_t len);
+
+    /**
+     * @brief Sets the I2C address of the slave device.
+     * 
+     * This function sets the I2C address of the slave device.
+     * 
+     * @param address The I2C address of the slave device.
+     * 
+     * @return N/A
+    */
+    void setAddress(uint8_t address);
 };
 
 #endif

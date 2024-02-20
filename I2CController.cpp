@@ -95,3 +95,8 @@ esp_err_t I2CController::write(uint8_t *tx_buffer, uint8_t reg, uint8_t len)
     
     return ret;
 }
+
+void I2CController::setAddress(uint8_t address)
+{
+    this->address = address;
+}
