@@ -12,7 +12,7 @@
 #define I2C_MASTER_TX_BUF_DISABLE   0               /*!< I2C master doesn't need buffer */
 #define I2C_MASTER_RX_BUF_DISABLE   0               /*!< I2C master doesn't need buffer */
 #define I2C_MASTER_TIMEOUT_MS       1000            /*!< I2C timeout in milliseconds */
-#define DEBUG_I2C_CONTROLLER        1               /*!< Enable debug logs for the I2C controller */
+// #define DEBUG_I2C_CONTROLLER        1               /*!< Enable debug logs for the I2C controller */
 
 static const char *TAG = "I2C_CONTROLLER";
 
@@ -24,7 +24,10 @@ private:
     uint32_t clk_speed;
 
     uint8_t write_buffer[32];
-public:
+    bool is_initialized = false;
+
+    static I2CController* instance;
+protected:
     /**
      * @brief Constructor for the I2CController class.
      * 
@@ -47,6 +50,19 @@ public:
      * @return N/A
     */
     ~I2CController();
+public:
+
+    I2CController(I2CController const&) = delete;
+    /**
+     * @brief Gets the instance of the I2C controller.
+     * 
+     * This function returns the instance of the I2C controller.
+     * 
+     * @return The instance of the I2C controller.
+    */
+    static I2CController* getInstance();
+
+    void operator=(I2CController const&) = delete;
 
     /**
     * @brief Initializes the I2C controller.
@@ -135,15 +151,25 @@ public:
     esp_err_t write(uint8_t *tx_buffer, uint8_t reg, uint8_t len);
 
     /**
-     * @brief Sets the I2C address of the slave device.
+     * @brief Set the Address object
      * 
-     * This function sets the I2C address of the slave device.
-     * 
-     * @param address The I2C address of the slave device.
-     * 
-     * @return N/A
-    */
+     * @param address 
+     */
     void setAddress(uint8_t address);
+
+    /**
+     * @brief Set the SDAPin value
+     * 
+     * @param sda_pin 
+     */
+    void setSDAPin(gpio_num_t sda_pin);
+
+    /**
+     * @brief Set the SCLPin value
+     * 
+     * @param scl_pin 
+     */
+    void setSCLPin(gpio_num_t scl_pin);
 };
 
 #endif

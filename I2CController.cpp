@@ -1,5 +1,6 @@
 #include "I2CController.hpp"
 
+I2CController* I2CController::instance = NULL;
 
 I2CController::I2CController(uint8_t address, gpio_num_t sda_pin, gpio_num_t scl_pin, uint32_t clk_speed)
 {
@@ -10,6 +11,10 @@ I2CController::I2CController(uint8_t address, gpio_num_t sda_pin, gpio_num_t scl
 }
 
 esp_err_t I2CController::begin() {
+    if(is_initialized)
+    {
+        return ESP_OK;
+    }
     i2c_port_t i2c_master_port = I2C_MASTER_NUM;
 
     i2c_config_t conf;
@@ -26,6 +31,8 @@ esp_err_t I2CController::begin() {
     #if DEBUG_I2C_CONTROLLER
         ESP_LOGI(TAG, "Initializing I2C controller");
     #endif
+
+    is_initialized = true;
 
     return i2c_driver_install(i2c_master_port, conf.mode, I2C_MASTER_RX_BUF_DISABLE, I2C_MASTER_TX_BUF_DISABLE, 0);
 }
@@ -99,4 +106,25 @@ esp_err_t I2CController::write(uint8_t *tx_buffer, uint8_t reg, uint8_t len)
 void I2CController::setAddress(uint8_t address)
 {
     this->address = address;
+}
+
+void I2CController::setSDAPin(gpio_num_t sda_pin)
+{
+    this->sda_pin = sda_pin;
+    is_initialized = false;
+}
+
+void I2CController::setSCLPin(gpio_num_t scl_pin)
+{
+    this->scl_pin = scl_pin;
+    is_initialized = false;
+}
+
+I2CController* I2CController::getInstance()
+{
+    if(instance == NULL)
+    {
+        instance = new I2CController(0x00, GPIO_NUM_5, GPIO_NUM_4, I2C_MASTER_FREQ_HZ);
+    }
+    return instance;
 }
