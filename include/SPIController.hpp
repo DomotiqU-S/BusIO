@@ -68,7 +68,7 @@ public:
      * 
      * @return ESP_OK if the byte is read successfully, ESP_FAIL otherwise.
     */
-    esp_err_t readByte(uint8_t *rx_buffer, uint8_t reg, bool restart = false);
+    esp_err_t readByte(uint8_t address, uint8_t *rx_buffer, uint8_t reg, bool restart = false);
     
     /**
      * @brief Reads a word from the SPI bus.
@@ -81,7 +81,7 @@ public:
      * 
      * @return ESP_OK if the word is read successfully, ESP_FAIL otherwise.
     */
-    esp_err_t readWord(uint8_t *rx_buffer, uint8_t reg, bool restart = false);
+    esp_err_t readWord(uint8_t address, uint8_t *rx_buffer, uint8_t reg, bool restart = false);
     
     /**
      * @brief Reads data from the SPI bus.
@@ -95,7 +95,7 @@ public:
      * 
      * @return ESP_OK if the data is read successfully, ESP_FAIL otherwise.
     */
-    esp_err_t read(uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool restart = false);
+    esp_err_t read(uint8_t address, uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool restart = false);
     
     /**
      * @brief Writes a byte to the SPI bus.
@@ -107,7 +107,7 @@ public:
      * 
      * @return ESP_OK if the byte is written successfully, ESP_FAIL otherwise.
     */
-    esp_err_t writeByte(uint8_t *tx_buffer, uint8_t reg);
+    esp_err_t writeByte(uint8_t address, uint8_t *tx_buffer, uint8_t reg);
     
     /**
      * @brief Writes a word to the SPI bus.
@@ -119,7 +119,7 @@ public:
      * 
      * @return ESP_OK if the word is written successfully, ESP_FAIL otherwise.
     */
-    esp_err_t writeWord(uint8_t *tx_buffer, uint8_t reg);
+    esp_err_t writeWord(uint8_t address, uint8_t *tx_buffer, uint8_t reg);
     
     /**
      * @brief Writes data to the SPI bus.
@@ -132,7 +132,7 @@ public:
      * 
      * @return ESP_OK if the data is written successfully, ESP_FAIL otherwise.
     */
-    esp_err_t write(uint8_t *tx_buffer, uint8_t reg, uint8_t len);
+    esp_err_t write(uint8_t address, uint8_t *tx_buffer, uint8_t reg, uint8_t len);
 };
 
 #endif

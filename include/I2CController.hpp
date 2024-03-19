@@ -8,7 +8,7 @@
 #include "driver/i2c.h"
 
 #define I2C_MASTER_NUM              (i2c_port_t)0   /*!< I2C master i2c port number, the number of i2c peripheral interfaces available will depend on the chip */
-#define I2C_MASTER_FREQ_HZ          400000          /*!< I2C master clock frequency */
+#define I2C_MASTER_FREQ_HZ          100000          /*!< I2C master clock frequency */
 #define I2C_MASTER_TX_BUF_DISABLE   0               /*!< I2C master doesn't need buffer */
 #define I2C_MASTER_RX_BUF_DISABLE   0               /*!< I2C master doesn't need buffer */
 #define I2C_MASTER_TIMEOUT_MS       1000            /*!< I2C timeout in milliseconds */
@@ -18,7 +18,7 @@ static const char *TAG = "I2C_CONTROLLER";
 
 class I2CController : public BusController {
 private:
-    uint8_t address;
+    uint8_t m_address;
     gpio_num_t sda_pin;
     gpio_num_t scl_pin;
     uint32_t clk_speed;
@@ -84,7 +84,7 @@ public:
      * 
      * @return ESP_OK if the byte is read successfully, ESP_FAIL otherwise.
     */
-    esp_err_t readByte(uint8_t *rx_buffer, uint8_t reg, bool restart = false);
+    esp_err_t readByte(uint8_t address, uint8_t *rx_buffer, uint8_t reg, bool restart = false);
     
     /**
      * @brief Reads a word from the slave device.
@@ -94,10 +94,10 @@ public:
      * @param rx_buffer Pointer to the buffer to store the received data.
      * @param reg The register address to read from.
      * @param restart if sensor support restart command
-     * 
+     * getInstance
      * @return ESP_OK if the word is read successfully, ESP_FAIL otherwise.
     */
-    esp_err_t readWord(uint8_t *rx_buffer, uint8_t reg, bool restart = false);
+    esp_err_t readWord(uint8_t address, uint8_t *rx_buffer, uint8_t reg, bool restart = false);
     
     /**
      * @brief Reads data from the slave device.
@@ -111,7 +111,7 @@ public:
      * 
      * @return ESP_OK if the data is read successfully, ESP_FAIL otherwise.
     */
-    esp_err_t read(uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool restart = false);
+    esp_err_t read(uint8_t address, uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool restart = false);
     
     /**
      * @brief Writes a byte to the slave device.
@@ -123,7 +123,7 @@ public:
      * 
      * @return ESP_OK if the byte is written successfully, ESP_FAIL otherwise.
     */
-    esp_err_t writeByte(uint8_t *tx_buffer, uint8_t reg);
+    esp_err_t writeByte(uint8_t address, uint8_t *tx_buffer, uint8_t reg);
     
     /**
      * @brief Writes a word to the slave device.
@@ -135,7 +135,7 @@ public:
      * 
      * @return ESP_OK if the word is written successfully, ESP_FAIL otherwise.
     */
-    esp_err_t writeWord(uint8_t *tx_buffer, uint8_t reg);
+    esp_err_t writeWord(uint8_t address, uint8_t *tx_buffer, uint8_t reg);
 
     /**
      * @brief Writes data to the slave device.
@@ -148,14 +148,7 @@ public:
      * 
      * @return ESP_OK if the data is written successfully, ESP_FAIL otherwise.
     */
-    esp_err_t write(uint8_t *tx_buffer, uint8_t reg, uint8_t len);
-
-    /**
-     * @brief Set the Address object
-     * 
-     * @param address 
-     */
-    void setAddress(uint8_t address);
+    esp_err_t write(uint8_t address, uint8_t *tx_buffer, uint8_t reg, uint8_t len);
 
     /**
      * @brief Set the SDAPin value

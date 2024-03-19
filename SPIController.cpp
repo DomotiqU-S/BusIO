@@ -27,17 +27,17 @@ esp_err_t SPIController::begin() {
     return ret;
 }
 
-esp_err_t SPIController::readByte(uint8_t *rx_buffer, uint8_t reg, bool restart)
+esp_err_t SPIController::readByte(uint8_t address, uint8_t *rx_buffer, uint8_t reg, bool restart)
 {
-    return this->read(rx_buffer, reg, 1, restart);
+    return this->read(0, rx_buffer, reg, 1, restart);
 }
 
-esp_err_t SPIController::readWord(uint8_t *rx_buffer, uint8_t reg, bool restart)
+esp_err_t SPIController::readWord(uint8_t address, uint8_t *rx_buffer, uint8_t reg, bool restart)
 {
-    return this->read(rx_buffer, reg, 4, restart);
+    return this->read(0, rx_buffer, reg, 4, restart);
 }
 
-esp_err_t SPIController::read(uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool restart)
+esp_err_t SPIController::read(uint8_t address, uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool restart)
 {
     esp_err_t ret;
     memset(&transaction, 0, sizeof(transaction));       //Zero out the transaction
@@ -49,17 +49,17 @@ esp_err_t SPIController::read(uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool
     return ESP_OK;
 }
 
-esp_err_t SPIController::writeByte(uint8_t *tx_buffer, uint8_t reg)
+esp_err_t SPIController::writeByte(uint8_t address, uint8_t *tx_buffer, uint8_t reg)
 {
-    return this->write(tx_buffer, reg, 1);
+    return this->write(0, tx_buffer, reg, 1);
 }
 
-esp_err_t SPIController::writeWord(uint8_t *tx_buffer, uint8_t reg)
+esp_err_t SPIController::writeWord(uint8_t address, uint8_t *tx_buffer, uint8_t reg)
 {
-    return this->write(tx_buffer, reg, 4);
+    return this->write(0, tx_buffer, reg, 4);
 }
 
-esp_err_t SPIController::write(uint8_t *tx_buffer, uint8_t reg, uint8_t len)
+esp_err_t SPIController::write(uint8_t address, uint8_t *tx_buffer, uint8_t reg, uint8_t len)
 {
     esp_err_t ret;
     memset(&transaction, 0, sizeof(transaction));       //Zero out the transaction
@@ -69,3 +69,4 @@ esp_err_t SPIController::write(uint8_t *tx_buffer, uint8_t reg, uint8_t len)
     //ret = spi_device_transmit(HOST, &t);  //Transmit!
     return ESP_OK;
 }
+
