@@ -13,6 +13,9 @@ I2CController::I2CController(uint8_t address, gpio_num_t sda_pin, gpio_num_t scl
 esp_err_t I2CController::begin() {
     if(is_initialized)
     {
+        #if DEBUG_I2C_CONTROLLER
+            ESP_LOGI(TAG, "I2C controller already initialized");
+        #endif
         return ESP_OK;
     }
     i2c_port_t i2c_master_port = I2C_MASTER_NUM;
@@ -106,6 +109,9 @@ esp_err_t I2CController::write(uint8_t address, uint8_t *tx_buffer, uint8_t reg,
 void I2CController::setSDAPin(gpio_num_t sda_pin)
 {
     if(this->sda_pin != sda_pin) {
+        #ifdef DEBUG_I2C_CONTROLLER
+            ESP_LOGI(TAG, "Different SDA pin detected, reinitializing I2C controller");
+        #endif
         is_initialized = false;
         this->sda_pin = sda_pin;
     }
@@ -114,6 +120,9 @@ void I2CController::setSDAPin(gpio_num_t sda_pin)
 void I2CController::setSCLPin(gpio_num_t scl_pin)
 {
     if(this->scl_pin != scl_pin) {
+        #ifdef DEBUG_I2C_CONTROLLER
+            ESP_LOGI(TAG, "Different SCL pin detected, reinitializing I2C controller");
+        #endif
         is_initialized = false;
         this->scl_pin = scl_pin;
     }
