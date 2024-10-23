@@ -27,7 +27,7 @@ private:
     bool is_initialized = false;
 
     i2c_master_bus_config_t i2c_bus_config;
-    i2c_master_handle_t bus_handle;
+    i2c_master_bus_handle_t bus_handle;
 
     static I2CController* instance;
 protected:

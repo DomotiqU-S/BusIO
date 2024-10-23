@@ -39,7 +39,7 @@ esp_err_t I2CController::write(DevHandle_t device, uint8_t *tx_buffer, uint8_t l
     #if DEBUG_I2C_CONTROLLER
         ESP_LOGI(TAG, "Writing %d bytes to register 0x%02x", len, reg);
     #endif
-    ret = i2c_master_transmit(device.i2c_dev, tx_buffer, len + 1, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
+    ret = i2c_master_transmit(device.i2c_dev, tx_buffer, len + 1, I2C_MASTER_TIMEOUT_MS / 1000);
 }
 
 esp_err_t I2CController::writeByte(DevHandle_t device, uint8_t *tx_buffer)
@@ -60,9 +60,9 @@ esp_err_t I2CController::read(DevHandle_t device, uint8_t *rx_buffer, uint8_t le
         ESP_LOGI(TAG, "Reading %d bytes from register 0x%02x", len, reg);
     #endif
 
-    
 
-    ret = i2c_master_receive(device.i2c_dev, rx_buffer, len, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
+
+    ret = i2c_master_receive(device.i2c_dev, rx_buffer, len, I2C_MASTER_TIMEOUT_MS / 1000);
 }
 
 esp_err_t I2CController::readByte(DevHandle_t device, uint8_t *rx_buffer)

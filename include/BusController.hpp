@@ -8,6 +8,7 @@
 #include <string.h>
 #include "driver/i2c_master.h"
 
+
 typedef struct {
     i2c_master_dev_handle_t i2c_dev;
 } DevHandle_t;
