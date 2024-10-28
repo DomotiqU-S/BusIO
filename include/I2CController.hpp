@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "esp_log.h"
-
+#include "driver/i2c.h"
 
 #define I2C_MASTER_NUM              (i2c_port_t)0   /*!< I2C master i2c port number, the number of i2c peripheral interfaces available will depend on the chip */
 #define I2C_MASTER_FREQ_HZ          100000          /*!< I2C master clock frequency */
@@ -26,9 +26,6 @@ private:
     uint8_t write_buffer[32];
     bool is_initialized = false;
 
-    i2c_master_bus_config_t i2c_bus_config;
-    i2c_master_handle_t bus_handle;
-
     static I2CController* instance;
 protected:
     /**
@@ -43,7 +40,7 @@ protected:
      * 
      * @return N/A
     */
-    I2CController(gpio_num_t sda_pin, gpio_num_t scl_pin);
+    I2CController(uint8_t address, gpio_num_t sda_pin, gpio_num_t scl_pin, uint32_t clk_speed = I2C_MASTER_FREQ_HZ);
     
     /**
      * @brief Destructor for the I2CController class.
@@ -87,7 +84,7 @@ public:
      * 
      * @return ESP_OK if the byte is read successfully, ESP_FAIL otherwise.
     */
-    esp_err_t readByte(DevHandle_t device, uint8_t *rx_buffer);
+    esp_err_t readByte(uint8_t address, uint8_t *rx_buffer, uint8_t reg, bool restart = false);
     
     /**
      * @brief Reads a word from the slave device.
@@ -100,7 +97,7 @@ public:
      * getInstance
      * @return ESP_OK if the word is read successfully, ESP_FAIL otherwise.
     */
-    esp_err_t readWord(DevHandle_t device, uint8_t *rx_buffer);
+    esp_err_t readWord(uint8_t address, uint8_t *rx_buffer, uint8_t reg, bool restart = false);
     
     /**
      * @brief Reads data from the slave device.
@@ -114,7 +111,7 @@ public:
      * 
      * @return ESP_OK if the data is read successfully, ESP_FAIL otherwise.
     */
-    esp_err_t read(DevHandle_t device, uint8_t *rx_buffer, uint8_t len);
+    esp_err_t read(uint8_t address, uint8_t *rx_buffer, uint8_t reg, uint8_t len, bool restart = false);
     
     /**
      * @brief Writes a byte to the slave device.
@@ -126,7 +123,7 @@ public:
      * 
      * @return ESP_OK if the byte is written successfully, ESP_FAIL otherwise.
     */
-    esp_err_t writeByte(DevHandle_t device, uint8_t *tx_buffer);
+    esp_err_t writeByte(uint8_t address, uint8_t *tx_buffer, uint8_t reg);
     
     /**
      * @brief Writes a word to the slave device.
@@ -138,7 +135,7 @@ public:
      * 
      * @return ESP_OK if the word is written successfully, ESP_FAIL otherwise.
     */
-    esp_err_t writeWord(DevHandle_t device, uint8_t *tx_buffer);
+    esp_err_t writeWord(uint8_t address, uint8_t *tx_buffer, uint8_t reg);
 
     /**
      * @brief Writes data to the slave device.
@@ -151,15 +148,21 @@ public:
      * 
      * @return ESP_OK if the data is written successfully, ESP_FAIL otherwise.
     */
-    esp_err_t write(DevHandle_t device, uint8_t *tx_buffer, uint8_t len);
+    esp_err_t write(uint8_t address, uint8_t *tx_buffer, uint8_t reg, uint8_t len);
 
     /**
-     * @brief The function to change the pins of the I2C controller.
+     * @brief Set the SDAPin value
      * 
-     * @param sda_pin new SDA pin
-     * @param scl_pin new SCL pin
+     * @param sda_pin 
      */
-    void changePins(gpio_num_t sda_pin, gpio_num_t scl_pin);
+    void setSDAPin(gpio_num_t sda_pin);
+
+    /**
+     * @brief Set the SCLPin value
+     * 
+     * @param scl_pin 
+     */
+    void setSCLPin(gpio_num_t scl_pin);
 };
 
 #endif
