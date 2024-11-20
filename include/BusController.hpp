@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "sdkconfig.h
+
 class BusController {
 private:
 public:
