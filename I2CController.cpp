@@ -132,7 +132,7 @@ I2CController* I2CController::getInstance()
 {
     if(instance == NULL)
     {
-        instance = new I2CController(0x00, CONFIG_I2C_SDA, CONFIG_I2C_SCL, I2C_MASTER_FREQ_HZ);
+        instance = new I2CController(0x00, (gpio_num_t)CONFIG_I2C_SDA, (gpio_num_t)CONFIG_I2C_SCL, I2C_MASTER_FREQ_HZ);
     }
     return instance;
 }
